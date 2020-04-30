@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="什么是Search problem search is about how a sequence if action that achieves a goal when no single action will do. 相比于machine learning 给出single action， search 解决的是如何产生一整个action sequence。  可不可以理解为machine l">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IAI search ">
+<meta property="og:url" content="http://yoursite.com/2020/04/27/IAI-search/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="什么是Search problem search is about how a sequence if action that achieves a goal when no single action will do. 相比于machine learning 给出single action， search 解决的是如何产生一整个action sequence。  可不可以理解为machine l">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="c:/Users/32027/AppData/Roaming/Typora/typora-user-images/image-20200427115849707.png">
+<meta property="og:image" content="c:/Users/32027/AppData/Roaming/Typora/typora-user-images/image-20200427125248587.png">
+<meta property="og:image" content="c:/Users/32027/AppData/Roaming/Typora/typora-user-images/image-20200427132623116.png">
+<meta property="og:image" content="https://pic3.zhimg.com/v2-5189bbfc3914357792fc1973e49c1376_b.webp">
+<meta property="og:image" content="c:/Users/32027/AppData/Roaming/Typora/typora-user-images/image-20200427220411876.png">
+<meta property="og:image" content="c:/Users/32027/AppData/Roaming/Typora/typora-user-images/image-20200427223051948.png">
+<meta property="article:published_time" content="2020-04-27T10:50:13.000Z">
+<meta property="article:modified_time" content="2020-04-30T18:54:11.398Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:/Users/32027/AppData/Roaming/Typora/typora-user-images/image-20200427115849707.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/04/27/IAI-search/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>IAI search  | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/27/IAI-search/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Author">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          IAI search 
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-04-27 11:50:13" itemprop="dateCreated datePublished" datetime="2020-04-27T11:50:13+01:00">2020-04-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-04-30 19:54:11" itemprop="dateModified" datetime="2020-04-30T19:54:11+01:00">2020-04-30</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="什么是Search-problem"><a href="#什么是Search-problem" class="headerlink" title="什么是Search problem"></a>什么是Search problem</h2><p><img src="C:\Users\32027\AppData\Roaming\Typora\typora-user-images\image-20200427115849707.png" alt="image-20200427115849707"></p>
+<p>search is about <strong>how a sequence if action that achieves a goal</strong> when no single action will do.</p>
+<p>相比于machine learning 给出single action， search 解决的是如何产生一整个action sequence。 </p>
+<p>可不可以理解为machine learning中大多的特征我们是把他们抽象为没有关系的量。或者说 independent variable。 那么search就是有相关关系的量，比如怎么处理大象分两步，1. 打开冰箱，2.放进大象。 怎量不是不能分开的。</p>
+<h3 id="application"><a href="#application" class="headerlink" title="application"></a>application</h3><ul>
+<li><p>route finding actions： leave station objective： fewest changes</p>
+<p>这里面包含了大量的action，先怎么走，再怎么走。</p>
+</li>
+<li><p>solving puzzle actions： move pieces objectives： reach a certain configuration</p>
+</li>
+<li>robot planning actions: translate and rotate joints objective: faster? </li>
+<li><p>speech recognition </p>
+</li>
+<li><p>action</p>
+</li>
+<li><p>objectives</p>
+</li>
+</ul>
+<h2 id="Tree-search-Monte-Carlo-tree-search"><a href="#Tree-search-Monte-Carlo-tree-search" class="headerlink" title="Tree search(Monte Carlo tree search )"></a>Tree search(Monte Carlo tree search )</h2><h3 id="search-problem"><a href="#search-problem" class="headerlink" title="search problem"></a>search problem</h3><p>search 的核心是将非常复杂的问题分解为简单的问题，分解成每一不做什么，不作甚么，以及相应的后果但这样的问题是如果想要找到最好的就需要遍历$2^n$那样就太过麻烦了。所以search problem 引入了state。通过选择state 来找到有效的polynomial time algorithms。 什么是state</p>
+<p>search algorithms require a structure to keep track of the search tree that is being constructed</p>
+<h3 id="search-tree"><a href="#search-tree" class="headerlink" title="search tree"></a>search tree</h3><p><img src="C:\Users\32027\AppData\Roaming\Typora\typora-user-images\image-20200427125248587.png" alt="image-20200427125248587"></p>
+<p>they usually contain：</p>
+<blockquote>
+<p>$S_{start}:$ starting points  the root of the tree</p>
+<p>Actions(s): possible actions: each edge leaving a node s corresponds to a possible action a that could performed in state s.  </p>
+<p>Cost(s,a): action cost leaving node s through action a</p>
+<p>Succ(s,a): successors</p>
+<p>Goal(s): found solutions: leaves </p>
+</blockquote>
+<p>core: to find the root to leaf  path that has the minimum cost. </p>
+<h3 id="Measuring-performance"><a href="#Measuring-performance" class="headerlink" title="Measuring performance"></a>Measuring performance</h3><ul>
+<li><p>completeness</p>
+<p>is the algorithms guaranteed to find a solution when there is one</p>
+<p><em>b</em>: THE BRANCHING factor or maximum number of successors of any nodes;有多少个成功了</p>
+<p><em>d</em>: the depth of shallowest node （the numbers of steps along the path to root）（有多少步，infinite？）（有多少的分支）</p>
+<p><em>D</em> the length of any path，</p>
+</li>
+<li><p>optimality </p>
+<p>Does the strategy find the optimal solution </p>
+</li>
+<li><p>Time complexity </p>
+<p>How long does it take to find a solution</p>
+</li>
+<li><p>space complexity </p>
+<p>How much memory is needed to perform the search </p>
+</li>
+</ul>
+<h3 id="backtracking-search"><a href="#backtracking-search" class="headerlink" title="backtracking search"></a>backtracking search</h3><p>回溯法又称择优搜索法。按选优条件向前搜索以达到目的。当探索到某一步发现达不到目标就退回重选</p>
+<p>backtracking search is the simplest algorithm which just tries all paths。</p>
+<p><img src="C:\Users\32027\AppData\Roaming\Typora\typora-user-images\image-20200427132623116.png" alt="image-20200427132623116"></p>
+<p>回溯法是通过调用所有可能的path，如果调用的这个path有我们需要的结果（最优而不仅是成功）那么达成目标，继续考虑其他的。没有的话，那么考虑其他的分支，先从深度考虑开始。就是现在这个node往下面还能走到哪。走不下不就往回跳。backtracking 的时间与nodes成比例，所以耗时会越来越久。一般的解决方法就是之抓取最大的depth在某些点放弃或者比允许visit same state</p>
+<h3 id="Depth-first-search-（DFS）（last-in-first-out）（stack）"><a href="#Depth-first-search-（DFS）（last-in-first-out）（stack）" class="headerlink" title="Depth first search （DFS）（last in first out）（stack）"></a>Depth first search （DFS）（last in first out）（stack）</h3><p>Idea： Backtracking search +stop when find the first goal state,不track cost</p>
+<p>Assumption： Action cost Cost(s,a)=0</p>
+<p>和backtracking search 的区别在于当找到最优解。就停止。 </p>
+<p>Memory：O(D)(small)</p>
+<p>Time： $O(b^D)$ 最坏的情况</p>
+<h3 id="breadth-first-search-（first-in-first-out）-queue"><a href="#breadth-first-search-（first-in-first-out）-queue" class="headerlink" title="breadth first search （first in first out）(queue)"></a>breadth first search （first in first out）(queue)</h3><p>Idea： explore <strong>all nodes</strong> in order of increasing depth</p>
+<p>assumption； Action cost Cost（s，a）=c</p>
+<p>Memeory： $O(b^d)$(worse)</p>
+<p>Time: $O(b^d)$</p>
+<h3 id="DFS-with-iterative-deepening"><a href="#DFS-with-iterative-deepening" class="headerlink" title="DFS with iterative deepening"></a>DFS with iterative deepening</h3><p>Idea: Modify DFS to stop at a maximum depth</p>
+<p>Idea: call DFS for maximum depth </p>
+<p>Memory: O(d) (better) </p>
+<p>Time: O(b d ) (same as BFS)</p>
+<p><img src="https://pic3.zhimg.com/v2-5189bbfc3914357792fc1973e49c1376_b.webp" alt="img"></p>
+<p><img src="C:\Users\32027\AppData\Roaming\Typora\typora-user-images\image-20200427220411876.png" alt="image-20200427220411876"></p>
+<p>在memory space与时间的较量中，memory space 胜出因为memory space 是有限的</p>
+<h2 id="dynamic-programming"><a href="#dynamic-programming" class="headerlink" title="dynamic programming"></a>dynamic programming</h2><p>dynamic programming 的核心在于利用历史记录来避免重复计算</p>
+<h3 id="what-is-future-cost"><a href="#what-is-future-cost" class="headerlink" title="what is future cost"></a>what is future cost</h3><p> the cost of minimum path from s to a. </p>
+<h3 id="action"><a href="#action" class="headerlink" title="action"></a>action</h3><p>from s—&gt;a have to pass s’ and for s’ the future path is minimum s’</p>
+<p>很多的state的效果是一样的，比如我先从家出门去小卖部，和先从家出门去小卖部中间的点再去小卖部是一样的？</p>
+<p>assumption:  the state graph defined by Actions(s) and Succ(s,a) is acylic</p>
+<p><img src="C:\Users\32027\AppData\Roaming\Typora\typora-user-images\image-20200427223051948.png" alt="image-20200427223051948"></p>
+<h3 id="算法步骤"><a href="#算法步骤" class="headerlink" title="算法步骤"></a>算法步骤</h3><ol>
+<li>定义数组元素： 定义一个数组用来保存历史</li>
+<li>找出数组元素之间的关系式 </li>
+<li>找出初始值。就是不能不能分割的值比如f（0）和f（1）</li>
+</ol>
+<h2 id="uniform-Cost-search"><a href="#uniform-Cost-search" class="headerlink" title="uniform Cost search"></a>uniform Cost search</h2><h2 id="informed-vs-uninformed-search"><a href="#informed-vs-uninformed-search" class="headerlink" title="informed vs uninformed search"></a>informed vs uninformed search</h2><h2 id="Greedy-search"><a href="#Greedy-search" class="headerlink" title="Greedy search"></a>Greedy search</h2><h2 id="A-search-algorithms"><a href="#A-search-algorithms" class="headerlink" title="A* search algorithms"></a>A* search algorithms</h2><h2 id="Heuristics-search-algorithms"><a href="#Heuristics-search-algorithms" class="headerlink" title="Heuristics search algorithms"></a>Heuristics search algorithms</h2><h2 id="Relaxation"><a href="#Relaxation" class="headerlink" title="Relaxation"></a>Relaxation</h2>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/26/IAI-Neural-Network/" rel="prev" title="IAI Neural Network">
+      <i class="fa fa-chevron-left"></i> IAI Neural Network
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/30/IIS-lecture4-incosistency/" rel="next" title="IIS lecture4 inconsistency">
+      IIS lecture4 inconsistency <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是Search-problem"><span class="nav-number">1.</span> <span class="nav-text">什么是Search problem</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#application"><span class="nav-number">1.1.</span> <span class="nav-text">application</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tree-search-Monte-Carlo-tree-search"><span class="nav-number">2.</span> <span class="nav-text">Tree search(Monte Carlo tree search )</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#search-problem"><span class="nav-number">2.1.</span> <span class="nav-text">search problem</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#search-tree"><span class="nav-number">2.2.</span> <span class="nav-text">search tree</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Measuring-performance"><span class="nav-number">2.3.</span> <span class="nav-text">Measuring performance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#backtracking-search"><span class="nav-number">2.4.</span> <span class="nav-text">backtracking search</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Depth-first-search-（DFS）（last-in-first-out）（stack）"><span class="nav-number">2.5.</span> <span class="nav-text">Depth first search （DFS）（last in first out）（stack）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#breadth-first-search-（first-in-first-out）-queue"><span class="nav-number">2.6.</span> <span class="nav-text">breadth first search （first in first out）(queue)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DFS-with-iterative-deepening"><span class="nav-number">2.7.</span> <span class="nav-text">DFS with iterative deepening</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dynamic-programming"><span class="nav-number">3.</span> <span class="nav-text">dynamic programming</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#what-is-future-cost"><span class="nav-number">3.1.</span> <span class="nav-text">what is future cost</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#action"><span class="nav-number">3.2.</span> <span class="nav-text">action</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法步骤"><span class="nav-number">3.3.</span> <span class="nav-text">算法步骤</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#uniform-Cost-search"><span class="nav-number">4.</span> <span class="nav-text">uniform Cost search</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#informed-vs-uninformed-search"><span class="nav-number">5.</span> <span class="nav-text">informed vs uninformed search</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Greedy-search"><span class="nav-number">6.</span> <span class="nav-text">Greedy search</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#A-search-algorithms"><span class="nav-number">7.</span> <span class="nav-text">A* search algorithms</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Heuristics-search-algorithms"><span class="nav-number">8.</span> <span class="nav-text">Heuristics search algorithms</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Relaxation"><span class="nav-number">9.</span> <span class="nav-text">Relaxation</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Author</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Author</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

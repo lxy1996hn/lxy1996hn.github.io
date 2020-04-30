@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="First order logic为什么我们需要一阶逻辑，在上一章，我们用了proposition logic，但是proposition logic 只表达事实，对于复杂的语句，proposition logic 没有办法表达，比如，有一些人是女的。这一句话就没办法表达，因此，我们引入了first order logic FOLs syntax（Objects，relation，function">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IIS First order logic">
+<meta property="og:url" content="http://yoursite.com/2020/04/13/lecture3/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="First order logic为什么我们需要一阶逻辑，在上一章，我们用了proposition logic，但是proposition logic 只表达事实，对于复杂的语句，proposition logic 没有办法表达，比如，有一些人是女的。这一句话就没办法表达，因此，我们引入了first order logic FOLs syntax（Objects，relation，function">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="c:/Users/32027/AppData/Roaming/Typora/typora-user-images/image-20200413220942062.png">
+<meta property="og:image" content="c:/Users/32027/AppData/Roaming/Typora/typora-user-images/image-20200413221201344.png">
+<meta property="article:published_time" content="2020-04-13T13:40:20.000Z">
+<meta property="article:modified_time" content="2020-04-30T19:00:38.779Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:/Users/32027/AppData/Roaming/Typora/typora-user-images/image-20200413220942062.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/04/13/lecture3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>IIS First order logic | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/13/lecture3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Author">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          IIS First order logic
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-04-13 14:40:20" itemprop="dateCreated datePublished" datetime="2020-04-13T14:40:20+01:00">2020-04-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-04-30 20:00:38" itemprop="dateModified" datetime="2020-04-30T20:00:38+01:00">2020-04-30</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="First-order-logic"><a href="#First-order-logic" class="headerlink" title="First order logic"></a>First order logic</h1><p>为什么我们需要一阶逻辑，在上一章，我们用了proposition logic，但是proposition logic 只表达事实，对于复杂的语句，proposition logic 没有办法表达，比如，有一些人是女的。这一句话就没办法表达，因此，我们引入了first order logic</p>
+<h2 id="FOLs-syntax（Objects，relation，function）"><a href="#FOLs-syntax（Objects，relation，function）" class="headerlink" title="FOLs syntax（Objects，relation，function）"></a>FOLs syntax（Objects，relation，function）</h2><p>和proposition logic 相比（只包括事实），FOLs 假设这个世界包括<strong>Objects</strong>(东西)，<strong>relations</strong>（action 比如part <strong>of ，teach。 </strong>function** （关系，father of ，more than）‘. 所以FOLs 的syntax包含更多的东西。notice that the output of the function could not be a truth or false but a variable. </p>
+<p>对于object来说可以是变量或者常</p>
+<p>一般来说 proposition logic 由 atomic letter 和connective（连接符号） 组成。 而对于FOLs 来说，他需要 <em>constant(比如人名，地点)，predicates（关系：爸爸），variable（x，y），connectives，<em>*quantifier $\forall$ and $\exists$</em></em> . 因为在first logic 中我们会考虑的有时是个体，有时是集体。这就是为什么我们需要quantifier。</p>
+<h2 id="FOLs-language"><a href="#FOLs-language" class="headerlink" title="FOLs  language"></a>FOLs  language</h2><h3 id="atomic-sentences"><a href="#atomic-sentences" class="headerlink" title="atomic sentences"></a>atomic sentences</h3><p>atomic sentence 是最基础的 fols。 它由 一个关系符号和一个在括号中的一列terms组成，这个term一般来时variable，constant，function。 就是predicate front，meaning there is relationship between terms</p>
+<blockquote>
+<p>Ravi and ajay are brothers =&gt; <em>Brother(Ravi,Ajay)</em></p>
+<p>chinky is a cat=&gt; cat(chinky).</p>
+</blockquote>
+<h3 id="complex-sentence"><a href="#complex-sentence" class="headerlink" title="complex sentence"></a>complex sentence</h3><p>complex sentence 一般由基础的atomic sentence 和 connectives 组成</p>
+<p>三种形式： （sentence， 一种是否定（not），一种是 autonomic sentence +connectives + autonomic sentence</p>
+<blockquote>
+<p>Brother(KingJohn,Richard)=&gt; Brother(Richard,KingJohn)</p>
+</blockquote>
+<p>很显然atomic sentence 和complex sentence能决定只是syntactically。但是他们在semantically是对的还是错的，没有办法得知。解决的方法是ground of FOLs. </p>
+<h3 id="Ground-of-FOL"><a href="#Ground-of-FOL" class="headerlink" title="Ground of FOL"></a>Ground of FOL</h3><p>definition: a sentence is ground if all <strong>of its variables are replaced by constants (or instantiation).</strong> </p>
+<blockquote>
+<p>Teach(weiru,x)—&gt; (this step is caled grounds)teach(weiru, database) is false because wenri is not teaching database but if it is IIS. Teach(weiru,IIS). </p>
+</blockquote>
+<p>我们这样做的原因是因为，对于计算机来说，这些词没有意义，计算机是通过穷举的方法。来判断的，所有会有很多syntactically正确，但是在semantically是错误的句子。 我们通过g<strong>ound 来确定正误</strong></p>
+<h3 id="Quantifier"><a href="#Quantifier" class="headerlink" title="Quantifier"></a>Quantifier</h3><ol>
+<li><p>$\exists$ <variable><sentence></p>
+<p>一些人是聪明的意味着，假设这个set中有很多个元素，$x_{1}$ $x_{2}$</p>
+<p>那么就是X1 is smart or X2 is smart</p>
+</li>
+</ol>
+<blockquote>
+<p>someone at BRL is smart </p>
+<p>FOL: $\exist$ x(at(x,BRL)) $\land$smart(x)</p>
+</blockquote>
+<p>对于$\exist$来说，它的connectives一般是$\land$ 。所以x在brl and x is smart如果用$\rightarrow$ 替代，表达的意思就会错误</p>
+<blockquote>
+<p>$\exist$ x(at(x,brl))=&gt; smart(x) means there is someone who is not at brl or who is smart</p>
+<p>because: $\exist$ x(at(x,brl))=&gt; smart(x) is equivalent to  $\exist$ $\lnot$ x(at(x,brl)  $\lor$   smart(x) </p>
+</blockquote>
+<ol>
+<li><p>$\forall$ <variable><sentence></p>
+<p>而对于$\forall$来说，所有人是聪明的意味着，假设这个set中有很多个元素，$x_{1}$ $x_{2}$ 那么就是X1 is smart AND X2 is smart。</p>
+<blockquote>
+<p>everyone taking IIS is smart 只是说参加考试的smart</p>
+<p>$\forall$  x(take(x,IIS)  $\implies$  smart(x)</p>
+</blockquote>
+<p>它的connectives是$\implies$ </p>
+<p>一个常见的错误是用$\land$ </p>
+<blockquote>
+<p>$\forall$  x(take(x,IIS)  $\land$  smart(x) 这样意义就变成了</p>
+<p>everyone takes IIS and every one is smart（这样没有参加考试的也变聪明了） </p>
+</blockquote>
+<ol>
+<li><p>example</p>
+<p>下面是一些FOLs 的例子</p>
+<blockquote>
+<p>all first year students in computer science take the programming module</p>
+<p>$\forall$ (x) (first year(x)^(pathway(x,CS)) =&gt; takes(x,programM))</p>
+</blockquote>
+</li>
+</ol>
+</li>
+</ol>
+<h2 id="Knowledge-engineering-in-Fols"><a href="#Knowledge-engineering-in-Fols" class="headerlink" title="Knowledge engineering in Fols"></a>Knowledge engineering in Fols</h2><ol>
+<li><p>identify the task</p>
+</li>
+<li><p>assemble the relevant knowledge</p>
+</li>
+<li><p>decide on a vocabulary of predicates,function and constants</p>
+</li>
+<li><p>encode general knowledge about the domain</p>
+</li>
+<li><p>encode a description of the specific problem instance</p>
+</li>
+<li><p>pose queries to the inference procedure and get answers </p>
+</li>
+<li><p>debug the knowledge base </p>
+</li>
+</ol>
+<h1 id="Rule-base-system"><a href="#Rule-base-system" class="headerlink" title="Rule-base system"></a>Rule-base system</h1><h2 id="syntax-of-rules-IF-conditions-THEN-conclusion"><a href="#syntax-of-rules-IF-conditions-THEN-conclusion" class="headerlink" title="syntax of rules (IF conditions THEN conclusion)"></a>syntax of rules (IF conditions THEN conclusion)</h2><p><strong>case 1:condition and conclusion are all based on <em>propositional logics</em></strong> </p>
+<p>when conditions are true for a rule, the conclusion can be inferred</p>
+<p><strong>case 2 : condition and conclusion are all based on FOLs</strong> </p>
+<p>we have to ground variables to figure our the IF condition in a rule is true or not</p>
+<h2 id="From-English-sentence-to-FOLs-to-rules"><a href="#From-English-sentence-to-FOLs-to-rules" class="headerlink" title="From English sentence to FOLs to rules"></a>From English sentence to FOLs to rules</h2><h2 id="General-architecture"><a href="#General-architecture" class="headerlink" title="General architecture"></a>General architecture</h2><p><img src="C:\Users\32027\AppData\Roaming\Typora\typora-user-images\image-20200413220942062.png" alt="image-20200413220942062"></p>
+<p>knowledge base: expert knowledge for general reasoning </p>
+<p>data base： for capturing current data（dataset）</p>
+<p>reasoning engine: for executing knowledge with fata to derive conclusion。 where rules are triggered when condition is true</p>
+<p>explanation/feedback: to display knowledge used and explain the </p>
+<p>user: to query the intelligent system for a decision support </p>
+<p>complex</p>
+<p><img src="C:\Users\32027\AppData\Roaming\Typora\typora-user-images\image-20200413221201344.png" alt="image-20200413221201344"></p>
+<p>fusion, 是考虑来自不同来源的知识，并且给他们赋予不同权重，可能相等，可能不同然后得到新的knowledge base</p>
+<p>integration 是考虑多个来源（可能相同）来移除error，duplication。换句话说，除错</p>
+<h2 id="Rule-based-system-scenario"><a href="#Rule-based-system-scenario" class="headerlink" title="Rule based system  scenario"></a>Rule based system  scenario</h2><p>default logic exception: </p>
+<p>$\alpha: \beta/\sigma$</p>
+<h3 id="conflict"><a href="#conflict" class="headerlink" title="conflict"></a>conflict</h3><p><em>subumption</em>:conflict raises when you can drive two different conslusion when apply rules. 一种解决方法是删掉有冲突的rule。然而在很多情况不能删除。比如</p>
+<blockquote>
+<p>IF Age(x)&gt;18 THEN adult fare(x)</p>
+<p>IF age(x)&gt;18 and student(x) then discountedfare(x)</p>
+<p>问题在于当一个人又大于18岁，又是学生的时候就会出问题。简单删去rule1会使得当一个人&gt;18岁确不是学生的情况没有办法处理。解决这类问题的方式就是conflict resolution</p>
+</blockquote>
+<h3 id="conflict-strategy"><a href="#conflict-strategy" class="headerlink" title="conflict strategy"></a>conflict strategy</h3><p><strong>Recency：</strong>take the data which arrived in working memory fisrtly （先到先得）</p>
+<p><strong>specificity:</strong>  choose the most specific one rule. the one with conditions（特殊性）</p>
+<p><strong>refractories:</strong></p>
+<p><em>other simple strategy</em> </p>
+<hr>
+<p><strong>give each rule a priority number</strong>. choose the rule with the highest number</p>
+<p>Notice that: <strong>adding more rules to an existing set is dangerous</strong>. that is why </p>
+<p>we can not simply integrate two set with two different algorithms tolgether </p>
+<h2 id="rule-based-system-type"><a href="#rule-based-system-type" class="headerlink" title="rule based system type"></a>rule based system type</h2><p>data-driven(forward) : matching conditions with new fact</p>
+<p>goal-driven(backward): which fact is more import, which one is more important. start from the top goal wand work through the sub goals </p>
+<p>datadriven是基于事实的，而goal driven是基于problem。比如我们分析一个银行的贷款数据。 从data 出发，我们就会先从 这个人有钱程度，年龄来推倒一些rule。再用这些rule做判断。而对于goal driven，我们会从已知的常识中看跟problem有关的rule，再慢慢细分它有什么condition组成，组成它的condition是可知的还是不可知的。又是否可以被进一步细分。如果不可以被细分那么就舍弃，如果可以，那么也许就是rule</p>
+<h3 id="uncertain-fact-and-rules"><a href="#uncertain-fact-and-rules" class="headerlink" title="uncertain fact and rules"></a>uncertain fact and rules</h3><hr>
+<p>uncertainty within knowledge and facts</p>
+<h2 id="inconsistency-handing"><a href="#inconsistency-handing" class="headerlink" title="inconsistency handing"></a>inconsistency handing</h2>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/11/human-factor-and-context/" rel="prev" title="human factor and context">
+      <i class="fa fa-chevron-left"></i> human factor and context
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/18/example/" rel="next" title="supervised learning">
+      supervised learning <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#First-order-logic"><span class="nav-number">1.</span> <span class="nav-text">First order logic</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#FOLs-syntax（Objects，relation，function）"><span class="nav-number">1.1.</span> <span class="nav-text">FOLs syntax（Objects，relation，function）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FOLs-language"><span class="nav-number">1.2.</span> <span class="nav-text">FOLs  language</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#atomic-sentences"><span class="nav-number">1.2.1.</span> <span class="nav-text">atomic sentences</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#complex-sentence"><span class="nav-number">1.2.2.</span> <span class="nav-text">complex sentence</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ground-of-FOL"><span class="nav-number">1.2.3.</span> <span class="nav-text">Ground of FOL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Quantifier"><span class="nav-number">1.2.4.</span> <span class="nav-text">Quantifier</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Knowledge-engineering-in-Fols"><span class="nav-number">1.3.</span> <span class="nav-text">Knowledge engineering in Fols</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Rule-base-system"><span class="nav-number">2.</span> <span class="nav-text">Rule-base system</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#syntax-of-rules-IF-conditions-THEN-conclusion"><span class="nav-number">2.1.</span> <span class="nav-text">syntax of rules (IF conditions THEN conclusion)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#From-English-sentence-to-FOLs-to-rules"><span class="nav-number">2.2.</span> <span class="nav-text">From English sentence to FOLs to rules</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#General-architecture"><span class="nav-number">2.3.</span> <span class="nav-text">General architecture</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rule-based-system-scenario"><span class="nav-number">2.4.</span> <span class="nav-text">Rule based system  scenario</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#conflict"><span class="nav-number">2.4.1.</span> <span class="nav-text">conflict</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#conflict-strategy"><span class="nav-number">2.4.2.</span> <span class="nav-text">conflict strategy</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rule-based-system-type"><span class="nav-number">2.5.</span> <span class="nav-text">rule based system type</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#uncertain-fact-and-rules"><span class="nav-number">2.5.1.</span> <span class="nav-text">uncertain fact and rules</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#inconsistency-handing"><span class="nav-number">2.6.</span> <span class="nav-text">inconsistency handing</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Author</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Author</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+</body>
+</html>

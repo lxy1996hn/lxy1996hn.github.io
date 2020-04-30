@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="decision tree什么是pattern所谓的pattern应该就是指的每一个data 什么是decision tree以及decision tree的作用是什么所谓的decision tree就是如何构造一个feature之间的关系，使得可以通过feature与feature的连接来得到最后的target。 用另一句话说就是决策树，和classifier不同，classifier并不会对如">
+<meta property="og:type" content="article">
+<meta property="og:title" content="lecture5 decision tree ">
+<meta property="og:url" content="http://yoursite.com/2020/04/19/lecture5-decision-tree/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="decision tree什么是pattern所谓的pattern应该就是指的每一个data 什么是decision tree以及decision tree的作用是什么所谓的decision tree就是如何构造一个feature之间的关系，使得可以通过feature与feature的连接来得到最后的target。 用另一句话说就是决策树，和classifier不同，classifier并不会对如">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="c:/Users/32027/AppData/Roaming/Typora/typora-user-images/image-20200420092159182.png">
+<meta property="article:published_time" content="2020-04-19T17:00:16.000Z">
+<meta property="article:modified_time" content="2020-04-30T19:00:29.766Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:/Users/32027/AppData/Roaming/Typora/typora-user-images/image-20200420092159182.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/04/19/lecture5-decision-tree/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>lecture5 decision tree  | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/19/lecture5-decision-tree/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Author">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          lecture5 decision tree 
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-04-19 18:00:16" itemprop="dateCreated datePublished" datetime="2020-04-19T18:00:16+01:00">2020-04-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-04-30 20:00:29" itemprop="dateModified" datetime="2020-04-30T20:00:29+01:00">2020-04-30</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="decision-tree"><a href="#decision-tree" class="headerlink" title="decision tree"></a>decision tree</h1><h3 id="什么是pattern"><a href="#什么是pattern" class="headerlink" title="什么是pattern"></a>什么是pattern</h3><p>所谓的pattern应该就是指的每一个data</p>
+<h2 id="什么是decision-tree以及decision-tree的作用是什么"><a href="#什么是decision-tree以及decision-tree的作用是什么" class="headerlink" title="什么是decision tree以及decision tree的作用是什么"></a>什么是decision tree以及decision tree的作用是什么</h2><p>所谓的decision tree就是如何构造一个feature之间的关系，使得可以通过feature与feature的连接来得到最后的target。 用另一句话说就是决策树，和classifier不同，classifier并不会对如何建立features之间的联系来得到decision tree进行描述。</p>
+<p>对于decision tree大概有三种常用的方法： </p>
+<ol>
+<li>信息增益(information gain)</li>
+</ol>
+<ol>
+<li><p>增益比率(gain ratio)</p>
+</li>
+<li><p>基尼不纯度(Gini impurity)</p>
+</li>
+</ol>
+<p>课本上说决定decision tree的是在他们所处的node上的纯洁性purity。 我的理解是如何能把他们划分的更好，能以少量的branch将所有的pattern划分进去。而选择不同的features作为分叉树的开端都会导致不同的结果。</p>
+<h2 id="什么是信息（如何衡量一句话有多废）"><a href="#什么是信息（如何衡量一句话有多废）" class="headerlink" title="什么是信息（如何衡量一句话有多废）"></a>什么是信息（如何衡量一句话有多废）</h2><p><a href="https://mp.weixin.qq.com/s?__biz=MzI1OTYwNDE2Mg==&amp;mid=2247483753&amp;idx=1&amp;sn=acec759cf688e21660b61e791986bfac&amp;chksm=ea772ac4dd00a3d239995c8e6b9e83159e1ddd35781ec2109e1e0b6678f088001d988ca5756f&amp;token=47119943&amp;lang=zh_CN#rd" target="_blank" rel="noopener">如何衡量一句话有多废</a></p>
+<p>首先对于废话的定义就是没有什么信息含量的话，比如我说太阳会从东方升起，这句话没有信息含量，但如果说太阳会从西边升起，也没有因为，太阳一般是不可能从西边升起的。 信息量代表着在多大程度上这个信息能够帮助你的决策。 </p>
+<p>但如何衡量一句话到底有多废，entropy 的前提就是认为<strong>不确定程度</strong>与概<strong>率分布</strong>有关。注意是概率分布。即 概率分布越平均，不确定程度越大。 注意这里隐含的一个信息是classification是处在两种或者多种情况，你需要根据信息来判断属于那种情况，所以这里的概率都是指的那种情况的概率。在<a href="https://mp.weixin.qq.com/s?__biz=MzI1OTYwNDE2Mg==&amp;mid=2247483753&amp;idx=1&amp;sn=acec759cf688e21660b61e791986bfac&amp;chksm=ea772ac4dd00a3d239995c8e6b9e83159e1ddd35781ec2109e1e0b6678f088001d988ca5756f&amp;token=47119943&amp;lang=zh_CN#rd" target="_blank" rel="noopener">如何衡量一句话有多废</a> 给出了一个例子。假设一个电影院有215个座位，那么小明有可能坐在任何一个位置上。这个时候<strong>不确定程度很大</strong>。这个时候如果给出一个<strong>信息</strong>： 小明坐在第一排的任何任何一个位置的概率就缩小了，或者说现在是新的概率分布了。也生成了<strong>新的不确定程度</strong> 那么<strong>信息量就是就两个不确定程度相减。</strong>也就是给出的这个信息能在多大程度上改变entropy。     </p>
+<p>为了量化这些量，对数函数$-log$被引入了。-log具有的特性为可以保证一概率为幂的对数函数为整数。 而且两个独立事件（或者说feature。不同feature的选项）A和B消除的不确定性 就是相减：$-log(p(x1)*p(x2))=-log(p(x1))-log(p(x2))$ </p>
+<p>由此，我们可以定义一个概率分布的不确定性： </p>
+<script type="math/tex; mode=display">
+H=\sum^n_{i=1}-p_i log_2 (p_i)</script><h3 id="什么是purity"><a href="#什么是purity" class="headerlink" title="什么是purity"></a>什么是purity</h3><p>pure：they will contain only data of one class(换句话说不能再往下分)</p>
+<p>impurity： 如果他包含了来自其他class的数据。</p>
+<p>decision tree 就是要去能够带来最纯洁的features 的<strong>排列方式</strong></p>
+<h3 id="如何测量-purity"><a href="#如何测量-purity" class="headerlink" title="如何测量 purity"></a>如何测量 purity</h3><p>对于测量purity的方法，我们可以采用entropy(信息熵)。信息熵就是所有样本各种样本出现的不确定之和。如果信息熵越大，那么不确定就越大，把信息弄清楚需要的信息量就越多。信息熵越大，那么这个属性所拥有的样本类别越大 entropy 测量的information content或者说（lack of information）of a probability distribution </p>
+<p>假设我们有n 个class。$P_i$是 probability 当 patterns 属于class i的时候</p>
+<p>the entropy of this distribution is given by</p>
+<p>​    </p>
+<script type="math/tex; mode=display">
+H=\sum^n_{i=1}-p_i log_2 (p_i)</script><p>注意是所有class的$-p_i log_2 (p_i)$ 之和。 </p>
+<p><img src="C:\Users\32027\AppData\Roaming\Typora\typora-user-images\image-20200420092159182.png" alt="image-20200420092159182"></p>
+<p>information gain：根据<a href="https://zhuanlan.zhihu.com/p/41134986" target="_blank" rel="noopener">信息熵</a> 的说法： 特征A 对训练数据集D的信息增益g(D,a),定义为集合D的经验熵 H(D) 与特征A 给定条件下D的经验条件熵H(D|A)之差</p>
+<p>​            </p>
+<script type="math/tex; mode=display">
+Gain(X)=info（D）-info_A(D)</script><h3 id="信息熵与classification-的关系"><a href="#信息熵与classification-的关系" class="headerlink" title="信息熵与classification 的关系"></a>信息熵与classification 的关系</h3><p>特征A 对训练数据集D的信息增益$g(D,A)$ 定义为集合D的经验熵H(D) 与特征A 在给定条件下D的经验条件熵H(D|A)之差，即</p>
+<script type="math/tex; mode=display">
+g(D,A)=H(D)-H(D|A)</script><p>决策树学习英勇信息增益准则作为选择特征，给定训练数据集D和特征A。经验熵 H(D|A)表示特征A给给定条件下对数据集D进行分类的不确定性。差即为信息增益，就表示由于特征A而使得对数据集D的分类的不确定较少的程度因为不同的特征具有不同的信息增熵。所有信息增熵具有更强的分类能力</p>
+<p>这段话说的假设，我们有一个比如说生病那么对于最终的得病的结果来说就有两种，一种是得病，一种是没得，这种情况下不确定的程度是很高的。$H(D)=-1/2log_2(1/2)-1/2log_2(1/2)$ 当然这种前提是按照得病和没得病的个数都是1/2 来算的。如果不是这样，会有差别。具体参见<a href="https://zhuanlan.zhihu.com/p/41134986" target="_blank" rel="noopener">信息熵</a></p>
+<h2 id="pruning-Decision-tree（剪枝）"><a href="#pruning-Decision-tree（剪枝）" class="headerlink" title="pruning Decision tree（剪枝）"></a>pruning Decision tree（剪枝）</h2><h3 id="为什么要剪枝"><a href="#为什么要剪枝" class="headerlink" title="为什么要剪枝"></a>为什么要剪枝</h3><p>随着决策树的增长，训练集上的精度是单调上升的，然而在独立的测试样例张测出来的精度是先上升后下降。这是由于噪音，错误的样本数据。比如说被进行了错误的判断。特征属性不能完全作为分类标准，或者数据量不够大导致的。所以我们就需要剪枝来帮助我们。这也就是剪枝的作用是帮助generalisation。<a href="https://www.cnblogs.com/starfire86/p/5749334.html" target="_blank" rel="noopener">剪枝</a></p>
+<p>剪枝有两种预剪枝和后剪枝。</p>
+<p>预剪枝是在完全正确分类训练集之前，就停止输的生长，</p>
+<ol>
+<li><p>比如达到一定高度，</p>
+</li>
+<li><p>达到某一个节点的示例具备相同的特征向量，</p>
+</li>
+<li>定义一个阈值，当某个节点的示例个数小于阈值就停止生长</li>
+</ol>
+<p>后剪枝(postpruning):是首先构造完整的决策树，运输树过度拟合。然后对于置信度不够的子树用叶子节点替代. 这种方法更常用</p>
+<p>参考<a href="http://www.cse.unsw.edu.au/~cs9417ml/DT2/pruning.html" target="_blank" rel="noopener">pruning</a></p>
+<p>lecture notes 讲述的是MEP(minimum error pruning),其思路是采用自底向上，对于书中每个非叶节点，计算该节点的误差error，然后计算该节点每个分支的误差，加权相加。权为每个分支拥有的训练样本的比例。如果Er(t)&gt;Er(T就保留概述</p>
+<p>举例 比如假设 队友node i 总共有k 个pattern 还有 c&gt;k/2</p>
+<h2 id="如何构造属于自己decision-tree"><a href="#如何构造属于自己decision-tree" class="headerlink" title="如何构造属于自己decision tree"></a>如何构造属于自己decision tree</h2><p>比如ID3 算法</p>
+<p>（1） 收集数据</p>
+<p>（2） 准备数据</p>
+<p>（3）分析数据</p>
+<p>（4）训练算法</p>
+<p>（5）测试算法</p>
+<p>（6）使用算法</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/18/example/" rel="prev" title="supervised learning">
+      <i class="fa fa-chevron-left"></i> supervised learning
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/26/IAI-Neural-Network/" rel="next" title="IAI Neural Network">
+      IAI Neural Network <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#decision-tree"><span class="nav-number">1.</span> <span class="nav-text">decision tree</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是pattern"><span class="nav-number">1.0.1.</span> <span class="nav-text">什么是pattern</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是decision-tree以及decision-tree的作用是什么"><span class="nav-number">1.1.</span> <span class="nav-text">什么是decision tree以及decision tree的作用是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是信息（如何衡量一句话有多废）"><span class="nav-number">1.2.</span> <span class="nav-text">什么是信息（如何衡量一句话有多废）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是purity"><span class="nav-number">1.2.1.</span> <span class="nav-text">什么是purity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何测量-purity"><span class="nav-number">1.2.2.</span> <span class="nav-text">如何测量 purity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信息熵与classification-的关系"><span class="nav-number">1.2.3.</span> <span class="nav-text">信息熵与classification 的关系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pruning-Decision-tree（剪枝）"><span class="nav-number">1.3.</span> <span class="nav-text">pruning Decision tree（剪枝）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么要剪枝"><span class="nav-number">1.3.1.</span> <span class="nav-text">为什么要剪枝</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何构造属于自己decision-tree"><span class="nav-number">1.4.</span> <span class="nav-text">如何构造属于自己decision tree</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Author</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Author</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+</body>
+</html>

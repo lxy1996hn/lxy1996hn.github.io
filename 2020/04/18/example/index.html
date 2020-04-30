@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="simple supervised learning algorithms我们处理的主要是discrete 和 continuous. continuous 主要是linear regression， 而discrete主要是classify。  k-Nearest NeighbourK-nearest neighbour 描述一种场景，假设你已经classify出了属于两个label的point">
+<meta property="og:type" content="article">
+<meta property="og:title" content="supervised learning">
+<meta property="og:url" content="http://yoursite.com/2020/04/18/example/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="simple supervised learning algorithms我们处理的主要是discrete 和 continuous. continuous 主要是linear regression， 而discrete主要是classify。  k-Nearest NeighbourK-nearest neighbour 描述一种场景，假设你已经classify出了属于两个label的point">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="c:/Users/32027/AppData/Roaming/Typora/typora-user-images/image-20200418184044698.png">
+<meta property="og:image" content="c:/Users/32027/AppData/Roaming/Typora/typora-user-images/image-20200418210246701.png">
+<meta property="og:image" content="c:/Users/32027/AppData/Roaming/Typora/typora-user-images/image-20200418213449475.png">
+<meta property="og:image" content="c:/Users/32027/AppData/Roaming/Typora/typora-user-images/image-20200418220027317.png">
+<meta property="og:image" content="c:/Users/32027/AppData/Roaming/Typora/typora-user-images/image-20200419001942041.png">
+<meta property="article:published_time" content="2020-04-18T17:29:14.000Z">
+<meta property="article:modified_time" content="2020-04-30T19:04:15.151Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:/Users/32027/AppData/Roaming/Typora/typora-user-images/image-20200418184044698.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/04/18/example/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>supervised learning | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/18/example/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Author">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          supervised learning
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-04-18 18:29:14" itemprop="dateCreated datePublished" datetime="2020-04-18T18:29:14+01:00">2020-04-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-04-30 20:04:15" itemprop="dateModified" datetime="2020-04-30T20:04:15+01:00">2020-04-30</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="simple-supervised-learning-algorithms"><a href="#simple-supervised-learning-algorithms" class="headerlink" title="simple supervised learning algorithms"></a>simple supervised learning algorithms</h1><p>我们处理的主要是discrete 和 continuous. continuous 主要是linear regression， 而discrete主要是classify。 </p>
+<h2 id="k-Nearest-Neighbour"><a href="#k-Nearest-Neighbour" class="headerlink" title="k-Nearest Neighbour"></a>k-Nearest Neighbour</h2><p>K-nearest neighbour 描述一种场景，假设你已经classify出了属于两个label的point，现在有一个新加入的points，那么你要如何能够判定这个point是属于哪一个label呢（投票的观点）而且 kNN 对training set 的类别比如符合高斯分布于要求。，为什么classify并不需要训练集label，这是因为本身具有的训练和validation属性就使得它在不停地矫正。</p>
+<p><img src="C:\Users\32027\AppData\Roaming\Typora\typora-user-images\image-20200418184044698.png" alt="image-20200418184044698" style="zoom:67%;" /></p>
+<p>如上图所示，绿色部分就是新加入的点</p>
+<h3 id="what-is-k-Nearest-neighbour-learning"><a href="#what-is-k-Nearest-neighbour-learning" class="headerlink" title="what is k-Nearest neighbour learning"></a>what is k-Nearest neighbour learning</h3><p>类别： KNN 基于instance based learning， 没有显性的学习的过程，没有训练阶段，数据集实现已经有了分类和特征值，收到新的样本直接进行处理</p>
+<p>步骤 </p>
+<ol>
+<li><p>given an unclassified pattern x find the closest k labelled patterns in the training data.也就说它会对周边的k个数据的距离进行排序。</p>
+<p>如何选择distance： Euclidean distance， minimum distance</p>
+</li>
+</ol>
+<ol>
+<li>then classify as the majority 选择k邻居中最多的类别作为自己的类别，比如它的周边80%是a，那么它可能会选择a作为自己的类别</li>
+</ol>
+<ol>
+<li>you can also weight by distance </li>
+</ol>
+<p>算法步骤：</p>
+<ol>
+<li>载入数据</li>
+<li>分清楚test data和train data 的范围</li>
+<li>设定k的数值，以及正式设置K neighbors 问题在于载入的X，y究竟是什么，X数数据类型吗是 Y 是classify正确和错误吗</li>
+<li>预测， 通过 model.predict(Xtr or Xtra)来得到最终值</li>
+</ol>
+<h3 id="overfitting-and-underfitting"><a href="#overfitting-and-underfitting" class="headerlink" title="overfitting and underfitting"></a>overfitting and underfitting</h3><p>overfitting : k=过小的值比如1，过拟合，拟合程度100%， 只会匹配最近的邻居。 这种情况下一旦周边是噪音就会出现偏差</p>
+<p>underfitting: k=100, waste of time ，欠拟合，尽管训练的误差值会减少，但是学习的误差值就会增大，实际的与此确不会有问题</p>
+<h3 id="how-to-find-K"><a href="#how-to-find-K" class="headerlink" title="how to find K"></a>how to find K</h3><p>将数据分成training set（选取的K）and validation set（所有？）。 取trade-off的看值</p>
+<h3 id="K-NN-regression"><a href="#K-NN-regression" class="headerlink" title="K-NN regression"></a>K-NN regression</h3><p>knn regression 与k nearest neighbour 的区别再去，KNN regression 是numerical value。 </p>
+<p>所谓的KNN-regression 的核心思想是对于一组按照一定顺序储存的数据，我们确定这个点的值得方法可以使通过他的neighbours 来确定，。如图下</p>
+<p><img src="C:\Users\32027\AppData\Roaming\Typora\typora-user-images\image-20200418210246701.png" alt="image-20200418210246701"></p>
+<p>对于中心得红点，它的值可以通过周围的的K个蓝点的平均值（通常）来确定，如果我们将所有的预测点相连，那么最后我们剩下的就是一个line，当然这条line并不clean，它有时上，有时下。尽管对于线性的regression，这种方法看起来很不好，但是对于非线性的来说，这种方法非常好用</p>
+<p>步骤</p>
+<ol>
+<li><p>对于$\vec x$ 来说，找到它最近的在training set 里的k个 input vectors</p>
+</li>
+<li><p>假设这些vector$\vec x_1 $ $\vec x_2$ ….. 都有对应的y值</p>
+</li>
+<li><p>采用uniform weight 方法，或者distance weight 方法</p>
+<ul>
+<li><p>uniform weight</p>
+<p>$f(\vec x)={\sum^k_{i=1}y_i\over k}$</p>
+</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li><p>distance weight (??)</p>
+<p>$f(\vec x)={\sum^k_{i=1}w_iy_i\over W_i}$ and $w_i={1\over|\vec x-x_i|}$</p>
+</li>
+</ul>
+<h2 id="linear-regression"><a href="#linear-regression" class="headerlink" title="linear regression"></a>linear regression</h2><p>linear assumption 的前提假设是 假设$f(x)=\sum^n_{i=1}a_ix_i+b$ $a_i$ 就是参数</p>
+<p>linear regression 的核心就是通过选择参数$a_i$来减低mean squared the training set； 比如对于一个N的数来说</p>
+<script type="math/tex; mode=display">
+E={\sum_{(\vec x,y)}(y-\vec f(x))^2\over N}</script><p>想象这样一幅画面，根据不同a，b 就会生成不同的line，实际的点到想象的点有距离，我们要做的就是将square mean 变得最小</p>
+<p>如图：</p>
+<p><img src="C:\Users\32027\AppData\Roaming\Typora\typora-user-images\image-20200418213449475.png" alt="image-20200418213449475"></p>
+<p>例子</p>
+<p>但是如何最小，什么时候达到最小</p>
+<p>假设 我们 有一个 N data  of the form (x,y) and we assume </p>
+<p>$f(x)=ax+b$</p>
+<p>$E={1\over N } \sum _{x,y}(y-ax-b)^2$ 很显然唯一不知道的值就是a，b</p>
+<ol>
+<li>下一步我们需要得到平均的各个值</li>
+</ol>
+<p>$\bar x ={1\over N}\sum _{x,y} x=E(X)$  $\bar Y ={1\over N}\sum _{x,y} Y=E(Y)$</p>
+<p>$\bar {x^2 }={1\over N}\sum _{x,y} x^2=E(X^2)$</p>
+<p>$\bar {Y^2 }={1\over N}\sum _{x,y} Y^2=E(Y^2)$</p>
+<p>$\bar {xy }={1\over N}\sum _{x,y} xy=E(xy)$</p>
+<ol>
+<li><p>derivatives 如果我们想要找到最小值那么就要让</p>
+<p>$\alpha E \over \alpha a$ and $\alpha E \over \alpha b$ =0</p>
+<p>那么 ${\alpha E \over \alpha a}=0={1\over N } \sum_{x,y} 2(y-ax-b)(-x)$ and ${\alpha E \over \alpha b}=0={1\over N } \sum_{x,y} 2(y-ax-b)(-1)$</p>
+<p>$==&gt; b=\bar y - a\bar x  $</p>
+<p> ${\alpha E \over \alpha a}=0={1\over N } \sum_{x,y} 2(y-ax-b)(-x)$ ==&gt; $a\bar {x^2 }+b\bar x -\bar{xy}$ 把b带进去==&gt; a= $\bar {xy}-\bar x*\bar y\over \bar {x^2} -\bar x^2 $</p>
+</li>
+</ol>
+<ol>
+<li><img src="C:\Users\32027\AppData\Roaming\Typora\typora-user-images\image-20200418220027317.png" alt=""></li>
+</ol>
+<p>i is particular train pattern, the training pattern can contains many data. 举个例子，比如我们判断一个人漂不漂亮，1个pattern可能是五官，五官好的数据可以有很多个，一个pattern可能是骨架，骨架的数据又可以有很多。我们可以把这些数据视为一个整体vector 那么每一个组成。 其中$y_1=a_{1}x_{1,1}+a_2x_{1,2}….$ a作为一个整体对于所有pattern来说都是同一个，对于不同数据不一样？？</p>
+<p>那么就可以得到error的式子</p>
+<h3 id="parameter-optimisation"><a href="#parameter-optimisation" class="headerlink" title="parameter optimisation"></a>parameter optimisation</h3><p><img src="C:\Users\32027\AppData\Roaming\Typora\typora-user-images\image-20200419001942041.png" alt="image-20200419001942041"></p>
+<h2 id="Naive-Bayes-Classifier"><a href="#Naive-Bayes-Classifier" class="headerlink" title="Naive Bayes Classifier"></a>Naive Bayes Classifier</h2><p>贝叶斯分类器是一类分类算法的统称，他们均以贝叶斯定义为基础。 </p>
+<h3 id="what-is-naive-bayes-classifier"><a href="#what-is-naive-bayes-classifier" class="headerlink" title="what is naive bayes classifier"></a>what is naive bayes classifier</h3><p>朴素贝叶斯分类器在贝叶斯的基础上做出了一个最简单的假设“属性条件独立性假设”，即对于已知的类别，假设所有属性相互独立（？？是否是说各个pattern之间没有联系）每个属性独立的对分类产生影响</p>
+<p>举个例子：假设某个医院收了6个问诊病人<a href="http://www.ruanyifeng.com/blog/2013/12/naive_bayes_classifier.html" target="_blank" rel="noopener">example</a> </p>
+<blockquote>
+<p>症状　　职业　　　疾病</p>
+<p>打喷嚏　护士　　　感冒<br>打喷嚏　农夫　　　过敏<br>头痛　　建筑工人　脑震荡<br>头痛　　建筑工人　感冒<br>打喷嚏　教师　　　感冒<br>头痛　　教师　　　脑震荡</p>
+</blockquote>
+<p>假设现在来了第七个，它是一个打喷嚏的建筑工人，请问患上感冒的可能性有多大？这个问题可以看做是已知feature a，b 求classify 的class的类别。 </p>
+<p>解决这个问题从最基本的出发就是贝叶斯定理</p>
+<blockquote>
+<p>P(A|B)=P(A)P(B|A)/P(B) 在B的情况下a发生的概率为多少</p>
+</blockquote>
+<p>那么P(感冒|建筑工人x打喷嚏)=P(感冒)P(建筑工人x打喷嚏|感冒)/P(建筑工人x打喷嚏)</p>
+<p>因为朴素贝叶斯设定各个feature之间没有相关关系，所以</p>
+<p>P(感冒|建筑工人x打喷嚏)=P(感冒)P(打喷嚏|感冒)*P(打喷嚏|感冒)/P(建筑工人x打喷嚏)</p>
+<hr>
+<p>将上面的东西公式化：</p>
+<p>假设有n项features $F_1,F_2,F_3…F_n$, 我们需要将之分成m类就是$C_1,C_2,C_3…C_n$ </p>
+<blockquote>
+<p>$ P(C|F_1,F_2….F_3)=P(C)P(F_1|C)<em>。。。。.</em>P(F_n|C)\over P(F_1F_2F_n)$</p>
+</blockquote>
+<p>注意$P(F_1F_2…F_n)$ 都是一样的。所以可以忽略。问题就变成了求解$P(C)P(F_1|C)<em>。。。。.</em>P(F_n|C)$</p>
+<p>这是因为我们只关心最大化</p>
+<hr>
+<h3 id="数据处理（）"><a href="#数据处理（）" class="headerlink" title="数据处理（）"></a>数据处理（）</h3><p><a href="https://blog.csdn.net/qq_32690999/article/details/78737393?depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-1&amp;utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-1" target="_blank" rel="noopener">cite</a></p>
+<p>估计条件概率时有两种可能性1. 离散型（assignment1中）2. 连续性（assignment2）</p>
+<p>对于 1 我们只需要计算每个属性取值占所有样本的数目就可以 $P(x_i |c)={|D_{c,x_i}|\over|D_C|}$</p>
+<p>$D_C$ 表示训练集D第c类样本组成的集合，竖线是集合元素的数量 $D_{c,x_i}$</p>
+<p>连续的情况2 可能可以使用概率密度函数，高斯函数</p>
+<p>然而对于1 来说，还存在一种情况就是laplacian</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/13/lecture3/" rel="prev" title="IIS First order logic">
+      <i class="fa fa-chevron-left"></i> IIS First order logic
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/19/lecture5-decision-tree/" rel="next" title="lecture5 decision tree ">
+      lecture5 decision tree  <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#simple-supervised-learning-algorithms"><span class="nav-number">1.</span> <span class="nav-text">simple supervised learning algorithms</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#k-Nearest-Neighbour"><span class="nav-number">1.1.</span> <span class="nav-text">k-Nearest Neighbour</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#what-is-k-Nearest-neighbour-learning"><span class="nav-number">1.1.1.</span> <span class="nav-text">what is k-Nearest neighbour learning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#overfitting-and-underfitting"><span class="nav-number">1.1.2.</span> <span class="nav-text">overfitting and underfitting</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#how-to-find-K"><span class="nav-number">1.1.3.</span> <span class="nav-text">how to find K</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#K-NN-regression"><span class="nav-number">1.1.4.</span> <span class="nav-text">K-NN regression</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#linear-regression"><span class="nav-number">1.2.</span> <span class="nav-text">linear regression</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#parameter-optimisation"><span class="nav-number">1.2.1.</span> <span class="nav-text">parameter optimisation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Naive-Bayes-Classifier"><span class="nav-number">1.3.</span> <span class="nav-text">Naive Bayes Classifier</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#what-is-naive-bayes-classifier"><span class="nav-number">1.3.1.</span> <span class="nav-text">what is naive bayes classifier</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据处理（）"><span class="nav-number">1.3.2.</span> <span class="nav-text">数据处理（）</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Author</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Author</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+</body>
+</html>

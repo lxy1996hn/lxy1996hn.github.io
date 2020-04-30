@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="what is intelligent system什么是intelligent system，intelligent system 和人类又有什么关系，我们为什么又要学习intelligent system。它能又能为我们做什么呢？ 在lecture notes 中老师定义：  clearly defined tasks requiring intelligence and education">
+<meta property="og:type" content="article">
+<meta property="og:title" content="intelligent system: konwledge bases">
+<meta property="og:url" content="http://yoursite.com/2020/02/11/intelligent-system-konwledge-bases/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="what is intelligent system什么是intelligent system，intelligent system 和人类又有什么关系，我们为什么又要学习intelligent system。它能又能为我们做什么呢？ 在lecture notes 中老师定义：  clearly defined tasks requiring intelligence and education">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="data:image/png;base64,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">
+<meta property="og:image" content="c:/Users/32027/AppData/Roaming/Typora/typora-user-images/image-20200211212816230.png">
+<meta property="article:published_time" content="2020-02-11T19:44:08.000Z">
+<meta property="article:modified_time" content="2020-04-23T19:19:36.838Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="data:image/png;base64,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">
+
+<link rel="canonical" href="http://yoursite.com/2020/02/11/intelligent-system-konwledge-bases/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>intelligent system: konwledge bases | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/11/intelligent-system-konwledge-bases/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Author">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          intelligent system: konwledge bases
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-02-11 19:44:08" itemprop="dateCreated datePublished" datetime="2020-02-11T19:44:08+00:00">2020-02-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-04-23 20:19:36" itemprop="dateModified" datetime="2020-04-23T20:19:36+01:00">2020-04-23</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="what-is-intelligent-system"><a href="#what-is-intelligent-system" class="headerlink" title="what is intelligent system"></a>what is intelligent system</h2><p>什么是intelligent system，intelligent system 和人类又有什么关系，我们为什么又要学习intelligent system。它能又能为我们做什么呢？</p>
+<p>在lecture notes 中老师定义：</p>
+<blockquote>
+<p><strong>clearly defined tasks</strong> requiring intelligence and education from human tend to be doable for AI techniques, such as playing chess, performing probability calculation. </p>
+</blockquote>
+<p>但是什么又指intelligence，是指像人类一样能够在复杂环境下做出复杂的选择吗,考虑到计算的复杂性，intelligent system在大部分情况下难以达到人类的智能，所以说是<strong>clear defined tasks</strong>。 而在introduction to AI 中我们提及到artificial intelligence 是指在machine中创造出类人的智慧，具体表现为能够</p>
+<blockquote>
+<p><strong>achieve (complex) goal in (complex) environment,</strong> exploiting information gathered in the environment in order to perform the most <strong>appropriate actions, making decision</strong>   </p>
+</blockquote>
+<p>也就是说我们在的intelligent system 是被要求具备能在复杂环境中能够做出决定，并行动的能力，这种能力要求我们能够接受环境的信息(通过sensor)，整合这些信息。但在实际情况中，intelligent system远远达不到人的水平，比如人可以在人群中一下子认出自己的父母。这也就是为甚么intelligent system现在主要应用于<strong>clearly defined tasks</strong>。 目前的intelligent system 很难在极其复杂的环境中得出较好的答案。而人类具有良好的adapting/self evaluation .</p>
+<h2 id="The-history-of-intelligent-system"><a href="#The-history-of-intelligent-system" class="headerlink" title="The history of intelligent system"></a>The history of intelligent system</h2><p>在50年代到60年代，AI 就已经可以给出简单逻辑结论，和证明一些理论，创造一些计划了。但是遇到一些困难：</p>
+<p><strong>ambiguity</strong>(highly funded translation programs( Russian to English)were good at syntactic manipulation but bad at disambiguation. </p>
+<p>​    “the spirts is willing but the flesh is weak “becomes “The vodka is good but the meat is rotten”</p>
+<p><strong>scalability</strong> : each are small and can not scale to bigger instances</p>
+<p><strong>representation</strong> the representation are limited like how to represent the human knowledge?? </p>
+<p>到了70年代到80年代，更专业的系统被设计了出来，然而overpromising导致了第一次AI winter。</p>
+<p>在80年代末以及90年代初，multi-agent system。 deep blue(国际象棋)  让AI back again。 现在AI 取得了一系列的成就deepmind， autonomous car，smart grid。但是是否会有第二个寒冬呢？这谁又能知道呢。</p>
+<h2 id="modern-intelligent-system"><a href="#modern-intelligent-system" class="headerlink" title="modern intelligent system"></a>modern intelligent system</h2><p>现在的智能化系统(自动)有三个层次：</p>
+<ol>
+<li><p><strong>databases</strong>(the data are from sensors )</p>
+<p>data collection, extraction(光收集但是不对数据进行分析，只会导致数据爆炸)，integration(形成更高的级别)，querying, indexing(网页), retrieval(比如智慧城市就是一大堆数据点)</p>
+</li>
+<li><p><strong>data analytics</strong>  </p>
+<p>data understanding, analytics, visualization, prediction</p>
+</li>
+<li><p><strong>autonomous systems</strong> </p>
+<p>agent learn and adapt, plan with <strong>situation awareness; real-time monitoring and actions</strong> (无人机，自动驾驶飞机) </p>
+<hr>
+</li>
+</ol>
+<h2 id="logics-knowledge-representation-h核心领域"><a href="#logics-knowledge-representation-h核心领域" class="headerlink" title="logics, knowledge representation (h核心领域)"></a>logics, knowledge representation (h核心领域)</h2><h3 id="how-do-we-obtain-knowledge"><a href="#how-do-we-obtain-knowledge" class="headerlink" title="how do we obtain knowledge"></a>how do we obtain knowledge</h3><hr>
+<p>   第一问题是怎么定义knowledge？为什么我们需要knowledge？</p>
+<p>   在AI系统中核心的问题在于</p>
+<ol>
+<li><p>如何让计算机理解人类已有的知识</p>
+</li>
+<li><p>如何让人类理解人工智能新发现的知识</p>
+<p>也就是如何表示知识，让计算机能够理解知识，以及将计算机的知识解码成人类能懂的知识. <a href="https://zhuanlan.zhihu.com/p/34166115" target="_blank" rel="noopener">knowledge representation</a></p>
+<p><img src="data:image/png;base64,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" alt="data representation"></p>
+<p><strong>data</strong>(singularity)是knowledge representation 中最低级的一员。他是</p>
+<blockquote>
+<p>a collection of disconnected facts(usually obtained from data) </p>
+<p>比如今天的温度 -15度(温度计测量)</p>
+</blockquote>
+<p><strong>information</strong>(singularity)  is 第二层次，information和data区别在information通常由很多的data(linked)组成，能够给我们描述一件稍微复杂一点的事情。但我们很难由information中推测出什么来. </p>
+<p>information is easier to measure, visualize and analyse $\rightarrow$ 对同类信息进行整合 </p>
+<blockquote>
+<p>among facts is established </p>
+<p>比如今天的温度 -15度(温度计测量)和今天是二月10号</p>
+</blockquote>
+<p><strong>knowledge</strong>(generic) 是现在data mining 和AI 的focus，可以得出一定的结论, When we don’t just view information as a description of collected facts, but also <strong>understand how to apply it to achieve our goals,</strong> we turn it into knowledge. <a href="https://www.ontotext.com/knowledgehub/fundamentals/dikw-pyramid/" target="_blank" rel="noopener">knowledge pyramid</a></p>
+</li>
+</ol>
+<blockquote>
+<p>emerge when relationship among patterns are identified and understood</p>
+<p>if humidity is high and temperature drops, it is likely to rain. </p>
+</blockquote>
+<h3 id="Different-types-of-knowledge"><a href="#Different-types-of-knowledge" class="headerlink" title="Different types of knowledge"></a>Different types of knowledge</h3><hr>
+<p>   <img src="C:\Users\32027\AppData\Roaming\Typora\typora-user-images\image-20200211212816230.png" alt="image-20200211212816230"></p>
+<p>   <strong>tacit knowledge</strong> :  隐形知识 是指包括经验在内的难以用document 描述处理的。（难以进行逻辑推理的）</p>
+<p>   <strong>explicit knowledge</strong> 显性知识包括原理，程序，概念等非常坚固，且能用document 表达(可以进行逻辑推理的，可预测的)（可能抽象？）</p>
+<p>   <strong>factual knowledge</strong> 事实知识。 具有时效性，现在有效未来无效。</p>
+<h2 id="propositional-logics-命题逻辑"><a href="#propositional-logics-命题逻辑" class="headerlink" title="propositional logics(命题逻辑)"></a>propositional logics(命题逻辑)</h2><h3 id="what-is-proposition-logics"><a href="#what-is-proposition-logics" class="headerlink" title="what is proposition logics"></a>what is proposition logics</h3><hr>
+<p>   <strong>proposition logics</strong> this is the basic of intelligent system, it is about statement, assertions , sentences that <strong>do not have variables</strong>(probability).  Each statement is either true or false. This is called their true value, which means the unknown things not belongs to proposition logic. 比如，UK 是否会更改和欧盟的贸易协议(unknown)换句话说,在proposition logic里只有发生和不发生</p>
+<p>   build block: atomic propositions (atomic letter)$\rightarrow$ sentence. </p>
+<p>   e.g</p>
+<p>   S1: London is the capital of the UK(build block p) and(operator) the largest city in the UK(build block g)</p>
+<p>   s2: London is the most expensive place to live in the UK(s) and Bristol is not very far from London(t)</p>
+<h3 id="what-is-propositional-logics-syntax-semantics-language"><a href="#what-is-propositional-logics-syntax-semantics-language" class="headerlink" title="what is propositional logics: syntax, semantics, language"></a>what is propositional logics: syntax, semantics, language</h3><hr>
+<p>   <strong>syntax</strong> define how a sentence(structurally)  is defined.(similar to English grammar)</p>
+<p>   $\rightarrow$ <strong>a set of atomic letters( or proposition).</strong> denotes $A={p,q,r,a,b,c}$ that can not broken down into separate propositions. Each atomic proposition is either true or false</p>
+<p>   $\rightarrow$ <strong>a set of operations</strong>: negation(not), conjunction(AND)….</p>
+<p>   e.g ‘Bertrand Russell’ is a proper noun(grammar)</p>
+<p>   <strong>Language</strong> is the collection of all possible sentence given A and the set of connectives(what is connectives)(Language is dependent on both set A and the connectives(operations). )???</p>
+<p>   <strong>semantics</strong> define the <strong>meaning of the sentence</strong>, and their interpretations ( is this sentence true or not). 所以对于语义来说判断语句的正确或错误也是他的任务，我们通过<strong>TRUTH TABLE</strong> </p>
+<blockquote>
+<p>e.g “Bertrand Russel” refers to a British philosopher(meaning)</p>
+</blockquote>
+<p>   $ (condition)p ∨ (consequence)q$  true if p and q are both true</p>
+<p>   $p ∧ q$  true if p or q is true </p>
+<p>   $p=q$  same value</p>
+<p>   $p\rightarrow q$ if condition is true then the consequence should be true, if condition is false, then no matter the consequence is, the $p\rightarrow q$ is true. </p>
+<h3 id="possible-world-and-semantics"><a href="#possible-world-and-semantics" class="headerlink" title="possible world and semantics"></a>possible world and semantics</h3><hr>
+<p>   <strong>possible world </strong></p>
+<p>   in order to consider all atomic letters, we define the concept of possible world???. <strong>A possible world is an assignment of a truth table to every atomic letter</strong>. each possible world can be understood as particular view of the actual world. but only one is the actual world. </p>
+<p>   $w:A{true,false} A={p,q,r,s}$???</p>
+<hr>
+<p>   <em>one of the possible world could be</em></p>
+<p>   $w(p)=TRUE,W(q)=true…..w(r)=true,w(s)=true$ </p>
+<p>   there are 4 atomic letter, each has two possible value. thus there is 2^4=16 possible world $W={w_1,w_2,w_3….}$</p>
+<p>   <strong>possible world table</strong></p>
+<p>   express all possible world with its truth table of each atomic letter</p>
+<p>   e.g</p>
+<p>   W                        p                    q                    r                s</p>
+<p>   w_1                    1                     1                    0                1</p>
+<p>   <strong>if we need to consider sentences: $p ∧ q$  then we can only focus on some columns</strong> </p>
+<p>   所以说sentence实际上限制了possible world</p>
+<p>   <strong>truth table 和 possible world 的不同</strong></p>
+<p>   它们的不同在于possible world只是涉及每一个值得正确和错误，而truthtable是在具体的atomic letter 和connectives 下的正确，所以说 truth table 只使用部分atomic letter</p>
+<p>   <strong>relationship between an arbitrary sentence and possible world </strong></p>
+<p>   <strong>model</strong>？？？： a possible world w is a model of sentence $\beta$, if $\beta$ is true in this possible world </p>
+<p>   e.g p^q has 2 models. ()</p>
+<p>   <strong>Tautology</strong>: if all possible world are models of a formula, this formula is called tautology e.g a—&gt; a</p>
+<p>   <strong>false</strong>: if non of the possible world is the model of a formula, then the formula is false $p ∧ ¬q$</p>
+<p>   <strong>relationship between an arbitrary knowledge base and possible world </strong></p>
+<p>   <strong>model</strong>？？？： a possible world w is a model of every sentence in  $K$, then w is a model of $K$ </p>
+<p>   <strong>entailment</strong> given a knowledge base $K$ and formula$\alpha$: if every model of K is also a model of $\alpha$ m then $K$ entail  $\alpha$ from $K$ to prove  $\alpha$ ??? (也就是K是 $\alpha$  的子集，但是为什么从K 可以证明$\alpha$ )</p>
+<p>   <strong>inconsistency issue</strong></p>
+<ul>
+<li><p>if a knowledge has no model, then it is inconsistent </p>
+</li>
+<li><p>if a knowledge entail $\alpha$ and ¬$\alpha$ </p>
+</li>
+</ul>
+<p>B</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/02/06/HRI-introduction/" rel="prev" title="HRI introduction">
+      <i class="fa fa-chevron-left"></i> HRI introduction
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/02/12/dsp-lecture-1/" rel="next" title="dsp lecture 1">
+      dsp lecture 1 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#what-is-intelligent-system"><span class="nav-number">1.</span> <span class="nav-text">what is intelligent system</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-history-of-intelligent-system"><span class="nav-number">2.</span> <span class="nav-text">The history of intelligent system</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#modern-intelligent-system"><span class="nav-number">3.</span> <span class="nav-text">modern intelligent system</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#logics-knowledge-representation-h核心领域"><span class="nav-number">4.</span> <span class="nav-text">logics, knowledge representation (h核心领域)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#how-do-we-obtain-knowledge"><span class="nav-number">4.1.</span> <span class="nav-text">how do we obtain knowledge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Different-types-of-knowledge"><span class="nav-number">4.2.</span> <span class="nav-text">Different types of knowledge</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#propositional-logics-命题逻辑"><span class="nav-number">5.</span> <span class="nav-text">propositional logics(命题逻辑)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#what-is-proposition-logics"><span class="nav-number">5.1.</span> <span class="nav-text">what is proposition logics</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#what-is-propositional-logics-syntax-semantics-language"><span class="nav-number">5.2.</span> <span class="nav-text">what is propositional logics: syntax, semantics, language</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#possible-world-and-semantics"><span class="nav-number">5.3.</span> <span class="nav-text">possible world and semantics</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Author</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Author</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+</body>
+</html>

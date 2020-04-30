@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="machine learning是AI 中很常见的一种学习方法。最早于1959年由Arthur Samuel提出  Field of study that gives computers the ability to learn without being explicitly programmed   也就是说机器学习是一种特殊算法，机器学习的核心在我看来是特征他们是基于特征来的算法，一般包括训">
+<meta property="og:type" content="article">
+<meta property="og:title" content="introduction to machine learning">
+<meta property="og:url" content="http://yoursite.com/2020/02/03/introduction-to-machine-learning/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="machine learning是AI 中很常见的一种学习方法。最早于1959年由Arthur Samuel提出  Field of study that gives computers the ability to learn without being explicitly programmed   也就是说机器学习是一种特殊算法，机器学习的核心在我看来是特征他们是基于特征来的算法，一般包括训">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://static.javatpoint.com/tutorial/machine-learning/images/classification-algorithm-in-machine-learning.png">
+<meta property="og:image" content="https://3qeqpr26caki16dnhd19sv6by6v-wpengine.netdna-ssl.com/wp-content/uploads/2018/04/Scatter-Plot-of-Dataset-with-Line-for-Simple-Linear-Regression-Model-1024x768.png">
+<meta property="og:image" content="https://miro.medium.com/max/534/1*Z54JgbS4DUwWSknhDCvNTQ.png">
+<meta property="og:image" content="https://wp.wwu.edu/machinelearning/files/2017/01/mlconcepts_image5-rnehsa.png">
+<meta property="og:image" content="https://img-blog.csdn.net/20180914105359478?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2R1a3VrdTUwMzg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="http://yoursite.com/2020/02/03/introduction-to-machine-learning/![img](https://pic1.zhimg.com/80/v2-27f8c5989dd7790ccf6b626e6854e06c_hd.png">
+<meta property="article:published_time" content="2020-02-03T20:15:29.000Z">
+<meta property="article:modified_time" content="2020-04-16T14:45:46.740Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://static.javatpoint.com/tutorial/machine-learning/images/classification-algorithm-in-machine-learning.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/02/03/introduction-to-machine-learning/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>introduction to machine learning | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/03/introduction-to-machine-learning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Author">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          introduction to machine learning
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-02-03 20:15:29" itemprop="dateCreated datePublished" datetime="2020-02-03T20:15:29+00:00">2020-02-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-04-16 15:45:46" itemprop="dateModified" datetime="2020-04-16T15:45:46+01:00">2020-04-16</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>machine learning是AI 中很常见的一种学习方法。最早于1959年由Arthur Samuel提出</p>
+<blockquote>
+<p>Field of study that gives computers the ability to learn without being explicitly programmed </p>
+</blockquote>
+<p>也就是说机器学习是一种特殊算法，机器学习的核心在我看来是特征他们是基于特征来的算法，<em>一般包括训练集，特征，建模，模型等步骤，</em>可究竟什么是特征，特征与特征之间又有什么关系，以及训练集与特征集又有什么关系呢在<a href="https://easyai.tech/ai-definition/machine-learning/" target="_blank" rel="noopener">easyAI</a> 中举了一个例子 学习汉字一二三的书写，如何让电脑识别不同人书写的一二三呢。首先是大量的<em>训练集</em>，各种不同人书写的一二三（是否需要包括错误的案例比如4,5,6？？）然后是<em>特征</em>一是一条横线，二是两条横线，三是三条横线。然后需要不停的学习建模就是机器学习。这里有一个问题在于<em>我们如何知道这是有效特征？</em></p>
+<h2 id="Type-of-machine-learning"><a href="#Type-of-machine-learning" class="headerlink" title="Type of machine learning"></a>Type of machine learning</h2><p>一般来说，machine learning 分为 4种</p>
+<ul>
+<li><p>supervised  learning 监督学习</p>
+<blockquote>
+<p>learning a unknown function </p>
+<script type="math/tex; mode=display">
+f: \Omega \rightarrow \sigma</script><p>when $\Omega$ is n dimensional feature space and $\sigma$ is output space(typically 1-dimensional)???</p>
+<p>The aim is to learn an approximation of $f$</p>
+<p> from a set of <em>labbelled pattern</em> of the form ($x_1$ …….$x_n$ ,y ) where $y=f(x_1,……,x_n)$</p>
+</blockquote>
+<p>supervised learning 一般包括两种 classification and regression.</p>
+<p> classification: where$\sigma= {c_1,……,c_n}$ responding to a finite site of class or categories </p>
+<p><img src="https://static.javatpoint.com/tutorial/machine-learning/images/classification-algorithm-in-machine-learning.png" style="zoom:50%;" /></p>
+<p>regression: where $\sigma=\R$</p>
+<p><img src="https://3qeqpr26caki16dnhd19sv6by6v-wpengine.netdna-ssl.com/wp-content/uploads/2018/04/Scatter-Plot-of-Dataset-with-Line-for-Simple-Linear-Regression-Model-1024x768.png" alt="regression" style="zoom:50%;" /> </p>
+</li>
+<li><p>unsupervised learning 非监督学习</p>
+</li>
+<li><p>reinforcement learning 强化学习</p>
+</li>
+<li><p>learning theory 理论学习</p>
+<h2 id="regression-vs-classification"><a href="#regression-vs-classification" class="headerlink" title="regression vs classification"></a>regression vs classification</h2></li>
+</ul>
+<ol>
+<li><p>应用场景不同</p>
+<p>classification常被用来鉴别广告邮件，是离散的：只有是或不是(1 or 0) 而对于regression 来说，更像一种预测，建立线性或非线性关系,是一种逼近关系。例如假设身高和牛奶的关系。假设喝牛奶高，不喝牛奶矮。 classification根据喝牛奶的数量（特征）将数据分为高或矮。而regression就是建立身高与牛奶的具体关系，喝多少牛奶有多高。还可以预测：假设喝50斤牛奶能长多高</p>
+<ul>
+<li><h3 id="how-to-judge-performance"><a href="#how-to-judge-performance" class="headerlink" title="how to judge performance"></a>how to judge performance</h3></li>
+</ul>
+<p>有了数据，并且进行了训练，我们需要知道machine learning 算法的拟合度有多少？ 是否符合原数据</p>
+<ol>
+<li><h4 id="classification"><a href="#classification" class="headerlink" title="classification"></a>classification</h4><ul>
+<li><p><em>what is confusion matrix</em> </p>
+<p>confusion matrix is the combination of predicted and actual values. 假设一个人患了癌症。那么得癌症为1，没得为0. 我们对患癌没患癌进行预测你。</p>
+<p><img src="https://miro.medium.com/max/534/1*Z54JgbS4DUwWSknhDCvNTQ.png" alt="confusion matrix">TP: true positive, the acual cases and the predicted are both 1 (true)</p>
+<p><em>a person having cancel and the model classified his cases as cancer</em></p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+<pre><code>TN: true negative, acual cases and the predicted are both 0 (wrong)
+
+ *a person do not have cancer and the model tell he do not have cancer*
+
+
+
+FP: false positive: where the acual cases is 0 but the predicted is 1. 
+
+
+
+FN: false negative, where the actual cases was 1 but the predicted is 0.  预测的正确还是错误决定了true or false。 预测的1 还是0决定了 negative or positive
+
+   * *what is accuracy and precision* 
+
+     accuracy:  
+     $$
+     \frac{TP+TN}{TP+TN+FP+FN}
+     $$
+
+
+     precision: not worry unnecessary 
+     $$
+     \frac{TP}{TP+FP}
+     $$
+
+
+recall:  No missing case. 
+$$
+precision=\frac{TP}{TP+FN}
+$$
+  Accuracy vs precision
+
+    accuracy 指的就是实际正确性，我们预测的模型与实际情况有多大的误差。但也可能会出意外 
+</code></pre><p> Accuracy should NEVER be used as a measure when the target variable classes in the data are a majority of one class. <a href="https://medium.com/thalus-ai/performance-metrics-for-classification-problems-in-machine-learning-part-i-b085d432082b" target="_blank" rel="noopener">example</a></p>
+<p>precision：not worry people uncessary.   </p>
+<blockquote>
+<p>Precision is a measure that tells us what proportion of patients that we diagnosed as having cancer, actually had cancer. The predicted positives (People predicted as cancerous are TP and FP) </p>
+</blockquote>
+<ul>
+<li>what to minimise </li>
+</ul>
+<p>错误就是False positive 和 false negative。 但在什么情况下应该偏向于哪种，例如在癌症的例子中，我们会希望尽可能将所有的癌症患者找出来，那么就有可能能提高FP的概率（其实是降低FN概率）。换句话说就会有人没有癌症但是却被诊断为癌症。 再比如邮件，特别是学校的邮件，我们不希望学校的邮件也被认为是sparm 邮件，那么FP的概率就要下降</p>
+<ol>
+<li><h4 id="regression"><a href="#regression" class="headerlink" title="regression"></a>regression</h4></li>
+</ol>
+<p>mean squared error(MSE):</p>
+<script type="math/tex; mode=display">
+E=\frac{1}{N}\sum_{(x^\rightarrow,y)}(y-\hat{f}(\breve{x}))^2</script><h2 id="Generalisation"><a href="#Generalisation" class="headerlink" title="Generalisation"></a>Generalisation</h2><blockquote>
+<p>Generalization is a term used to describe a model’s ability to react to new data.  That is, after being trained on a training set, a model can digest new data and make accurate predictions <a href="https://wp.wwu.edu/machinelearning/2017/01/22/generalization-and-overfitting/" target="_blank" rel="noopener">generalisation</a></p>
+</blockquote>
+<p>在supervised learning中，有一点和其他很不一样的地方在于只有在supervised learning 中overfitting才会成为一个问题。supervised learning 的核心在于数据的训练，基于训练出来后模型的预测。这就意味着越多的数据，可以使得预测的结果更加准确，然而过分的准确会导致数据难以生成。有时候甚至会产生不准确的预测.</p>
+<p><img src="https://wp.wwu.edu/machinelearning/files/2017/01/mlconcepts_image5-rnehsa.png" alt="fitting"></p>
+<p>   太过简单又会导致难以解释variance。如果overfitthing 就会导致太过于specificIt will fail to make accurate predictions with new data because it learned the training data too well. </p>
+<h2 id="Train-and-Test-Data"><a href="#Train-and-Test-Data" class="headerlink" title="Train and Test Data"></a>Train and Test Data</h2><p> 分析生成的模型的好坏需要被分为训练数据和测试数据(注意在数据测试时不能被训练)</p>
+<blockquote>
+<p>直觉上，我们的模型在训练数据集表现的好，在测试数据集上依旧稳定，那么我们就找到了一个好的函数。但是，我们的模型选择并不是这么简单，是一个相对复杂的过程。（因为还有超参数设置，比如学习率）<a href="https://blog.csdn.net/dukuku5038/article/details/82699481" target="_blank" rel="noopener">data trainning</a></p>
+</blockquote>
+<p>经常会有模型在不同情况下表现不一的状况，所以需要对数据进行validation。 就是将训练数据拆分成两部分一部分训练一部分验证测试。验证测试来帮助进行模型选择. <img src="https://img-blog.csdn.net/20180914105359478?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2R1a3VrdTUwMzg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="validation"></p>
+<p>但是这种办法并不是完美的有一个很大问题在于模型和参数的选取极大的依赖于划分方法。 基于此有人提出了交叉论证： repeat many times with different divisions into trainning and test. <img src="![img](https://pic1.zhimg.com/80/v2-27f8c5989dd7790ccf6b626e6854e06c_hd.png" alt="N folds cross validation"></p>
+<p>即 </p>
+<script type="math/tex; mode=display">
+CV_{(n)}=\frac{1}{n}\sum^{n}_{i=1} MSE_{i}</script><p>将数据集分成N份每次取n-1份作为训练集，1份用于validation。然后依次往后推，很明显这样的计算量过大。 于是有了诸如K-fold cross validation 具体见<a href="https://zhuanlan.zhihu.com/p/24825503" target="_blank" rel="noopener">trainning and validation</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/02/03/introduction%20to%20artificial%20Intelligence%20Lecture%20note%201/" rel="prev" title="introduction to artificial Intelligence Lecture note 1">
+      <i class="fa fa-chevron-left"></i> introduction to artificial Intelligence Lecture note 1
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/02/03/how-to-use-latex-in-markdown/" rel="next" title="how to use latex in markdown">
+      how to use latex in markdown <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Type-of-machine-learning"><span class="nav-number">1.</span> <span class="nav-text">Type of machine learning</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#regression-vs-classification"><span class="nav-number">2.</span> <span class="nav-text">regression vs classification</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#how-to-judge-performance"><span class="nav-number">2.1.</span> <span class="nav-text">how to judge performance</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#classification"><span class="nav-number">2.1.1.</span> <span class="nav-text">classification</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#regression"><span class="nav-number">2.1.2.</span> <span class="nav-text">regression</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Generalisation"><span class="nav-number">3.</span> <span class="nav-text">Generalisation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Train-and-Test-Data"><span class="nav-number">4.</span> <span class="nav-text">Train and Test Data</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Author</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Author</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+</body>
+</html>
